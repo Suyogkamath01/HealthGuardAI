@@ -1,0 +1,4 @@
+study,approach,roc_auc,notes
+Strack et al. (2014),Logistic regression (HbA1c focus),~0.65,Original dataset paper
+Typical published ML,GBM / RF / ensembles,0.64-0.69,Consistent across literature
+HealthGuard AI (this work),CatBoost + calibration,0.655,"Leakage-safe, with 95% CI"
