@@ -1,0 +1,273 @@
+
+########################################################################
+# STEP 1/9: Data quality audit
+########################################################################
+
+======================================================================
+DATASET SHAPE
+======================================================================
+101,766 rows  x  50 columns
+
+======================================================================
+COLUMNS WITH MISSING VALUES
+======================================================================
+                   missing_count  missing_pct
+weight                     98569        96.86
+max_glu_serum              96420        94.75
+A1Cresult                  84748        83.28
+medical_specialty          49949        49.08
+payer_code                 40256        39.56
+race                        2273         2.23
+diag_3                      1423         1.40
+diag_2                       358         0.35
+diag_1                        21         0.02
+
+======================================================================
+RECOMMENDED HANDLING (grouped by strategy)
+======================================================================
+
+[CATEGORY_NOT_MEASURED]  (2 columns)
+  max_glu_serum, A1Cresult
+  -> NaN = test not performed; fill with 'Not measured'.
+
+[DROP_HIGH_MISSING]  (1 columns)
+  weight
+  -> 96.9% missing — too sparse to impute.
+
+[DROP_ID]  (2 columns)
+  encounter_id, patient_nbr
+  -> Identifier / leakage risk — exclude from features.
+
+[DROP_ZERO_VARIANCE]  (15 columns)
+  nateglinide, chlorpropamide, acetohexamide, tolbutamide, acarbose, miglitol, troglitazone, tolazamide, examide, citoglipton, glyburide-metformin, glipizide-metformin, glimepiride-pioglitazone, metformin-rosiglitazone, metformin-pioglitazone
+  -> One value covers 99.31% of rows — no signal.
+
+[IMPUTE_CATEGORY]  (6 columns)
+  race, payer_code, medical_specialty, diag_1, diag_2, diag_3
+  -> Fill missing with an explicit 'Unknown' category.
+
+[OK]  (24 columns)
+  gender, age, admission_type_id, discharge_disposition_id, admission_source_id, time_in_hospital, num_lab_procedures, num_procedures, num_medications, number_outpatient, number_emergency, number_inpatient, number_diagnoses, metformin, repaglinide, glimepiride, glipizide, glyburide, pioglitazone, rosiglitazone, insulin, change, diabetesMed, readmitted
+  -> Complete — usable as-is.
+
+======================================================================
+DUPLICATE / LEAKAGE CHECK
+======================================================================
+  duplicate_encounter_id          : 0
+  patients_with_repeat_encounters : 30,248
+  unique_patients                 : 71,518
+  total_encounters                : 101,766
+
+  Note: ~30k encounters are repeat visits by the same patient.
+  Consider keeping only the first encounter per patient_nbr, or use
+  patient-grouped splits, to avoid train/test leakage.
+
+======================================================================
+INVALID CATEGORY VALUES
+======================================================================
+  gender == 'Unknown/Invalid'     : 3
+
+======================================================================
+COLUMNS TO DROP
+======================================================================
+  18 columns flagged for dropping:
+  encounter_id, patient_nbr, weight, nateglinide, chlorpropamide, acetohexamide, tolbutamide, acarbose, miglitol, troglitazone, tolazamide, examide, citoglipton, glyburide-metformin, glipizide-metformin, glimepiride-pioglitazone, metformin-rosiglitazone, metformin-pioglitazone
+
+Saved full report -> reports/data_quality_report.csv
+
+########################################################################
+# STEP 2/9: Preprocessing & feature engineering
+########################################################################
+Preprocessing HealthGuard AI dataset...
+  rows: 101,766 -> remove expired/hospice -> 99,343 -> first encounter -> 69,990
+  feature dictionary -> /Users/suyash/Desktop/HealthGuardAI/reports/feature_dictionary.csv
+  final shape: (69990, 36)
+  30-day readmission rate: 8.980%  (positive class)
+  saved -> /Users/suyash/Desktop/HealthGuardAI/data/processed/clean_encounters.csv
+
+########################################################################
+# STEP 3/9: Model training & evaluation
+########################################################################
+Loading processed data...
+  train=55,992  test=13,998  pos_weight=10.14
+
+Training Logistic Regression ...
+  PR-AUC=0.169  ROC-AUC=0.651  recall@best=0.325  F1@best=0.239  CV PR-AUC=0.167±0.010
+
+Training Random Forest ...
+  PR-AUC=0.177  ROC-AUC=0.656  recall@best=0.384  F1@best=0.240  CV PR-AUC=0.168±0.008
+
+Training XGBoost ...
+  PR-AUC=0.179  ROC-AUC=0.652  recall@best=0.366  F1@best=0.238  CV PR-AUC=0.174±0.010
+
+Training LightGBM ...
+  PR-AUC=0.177  ROC-AUC=0.645  recall@best=0.326  F1@best=0.235  CV PR-AUC=0.170±0.008
+
+Training CatBoost ...
+  PR-AUC=0.181  ROC-AUC=0.656  recall@best=0.304  F1@best=0.251  CV PR-AUC=0.177±0.009
+
+=== Model comparison (sorted by PR-AUC) ===
+              model  roc_auc  pr_auc  brier  recall@0.5  precision@0.5  f1@0.5  best_threshold  recall@best  precision@best  f1@best  cv_pr_auc_mean  cv_pr_auc_std
+           CatBoost   0.6557  0.1812 0.2055      0.5012         0.1500  0.2309          0.5920       0.3039          0.2133   0.2507          0.1767         0.0094
+            XGBoost   0.6517  0.1790 0.2039      0.4996         0.1469  0.2270          0.5586       0.3660          0.1767   0.2383          0.1741         0.0102
+      Random Forest   0.6557  0.1772 0.1932      0.4185         0.1650  0.2367          0.5104       0.3842          0.1744   0.2399          0.1680         0.0076
+           LightGBM   0.6449  0.1771 0.1868      0.4336         0.1516  0.2247          0.5524       0.3262          0.1832   0.2346          0.1704         0.0082
+Logistic Regression   0.6506  0.1692 0.2278      0.5306         0.1395  0.2209          0.5984       0.3254          0.1887   0.2389          0.1673         0.0099
+
+Best model: CatBoost  ->  models/best_model.pkl
+Figures -> /Users/suyash/Desktop/HealthGuardAI/reports/figures
+
+########################################################################
+# STEP 4/9: Explainability (SHAP)
+########################################################################
+Computing SHAP explanations for the best model...
+  using tree explainer on 2,000 rows, 210 features
+
+Top 15 drivers of 30-day readmission risk:
+discharge_disposition_id_1     0.2151
+number_inpatient               0.1126
+time_in_hospital               0.0837
+age_ordinal                    0.0827
+num_lab_procedures             0.0663
+num_medications                0.0620
+diag_1_group_Circulatory       0.0596
+discharge_disposition_id_22    0.0490
+total_prior_visits             0.0470
+discharge_disposition_id_6     0.0383
+diag_1_group_Respiratory       0.0372
+n_active_meds                  0.0361
+service_utilization            0.0341
+number_diagnoses               0.0283
+discharge_disposition_id_3     0.0277
+
+Figures -> /Users/suyash/Desktop/HealthGuardAI/reports/figures
+
+########################################################################
+# STEP 5/9: Risk scoring & calibration
+########################################################################
+Building calibrated risk-scoring model...
+
+Observed readmission rate by risk tier (should increase):
+           patients  readmit_rate
+tier                             
+LOW            9961         0.065
+MODERATE       3776         0.136
+HIGH            247         0.356
+VERY HIGH        14         0.429
+
+Calibrated model -> models/calibrated_model.pkl
+Figures -> /Users/suyash/Desktop/HealthGuardAI/reports/figures
+
+########################################################################
+# STEP 6/9: Fairness analysis
+########################################################################
+Running fairness analysis on the best model...
+
+--- race ---
+attribute           group     n  selection_rate   tpr   fpr  actual_rate
+     race       Caucasian 10451           0.136 0.311 0.118        0.091
+     race AfricanAmerican  2554           0.113 0.268 0.097        0.090
+     race         Unknown   350           0.080 0.227 0.070        0.063
+     race        Hispanic   308           0.097 0.333 0.072        0.097
+     race           Other   229           0.087 0.455 0.069        0.048
+     race           Asian   106           0.075 0.333 0.052        0.085
+
+--- gender ---
+attribute  group    n  selection_rate   tpr   fpr  actual_rate
+   gender Female 7475           0.135 0.306 0.118        0.089
+   gender   Male 6523           0.120 0.302 0.102        0.091
+
+--- age_group ---
+attribute group    n  selection_rate   tpr   fpr  actual_rate
+age_group 60-80 6632           0.147 0.314 0.128        0.098
+age_group 30-60 4449           0.058 0.207 0.046        0.073
+age_group   80+ 2570           0.212 0.398 0.191        0.102
+age_group  0-30  347           0.046 0.300 0.031        0.058
+
+=== Fairness summary (disparities; lower is fairer) ===
+attribute  demographic_parity_diff  demographic_parity_ratio  equal_opportunity_diff  equalized_odds_fpr_diff  passes_4_5ths_rule
+     race                   0.0601                    0.5566                  0.2273                   0.0664               False
+   gender                   0.0151                    0.8881                  0.0039                   0.0167                True
+age_group                   0.1660                    0.2174                  0.1917                   0.1604               False
+
+Reports -> /Users/suyash/Desktop/HealthGuardAI/reports/fairness_report.csv
+Figures -> /Users/suyash/Desktop/HealthGuardAI/reports/figures
+
+########################################################################
+# STEP 7/9: Statistical rigour (CIs + DeLong)
+########################################################################
+Statistical analysis: bootstrap CIs + DeLong tests...
+  test n=13,998  positives=1,257
+
+ROC-AUC with 95% bootstrap CIs:
+  Random Forest          0.655  [0.639, 0.670]
+  CatBoost               0.655  [0.638, 0.671]
+  XGBoost                0.651  [0.635, 0.666]
+  Logistic Regression    0.650  [0.634, 0.666]
+  LightGBM               0.644  [0.628, 0.660]
+
+DeLong test — Random Forest vs others (H0: equal AUC):
+      model_a             model_b  auc_a  auc_b      z  p_value  significant_0.05
+Random Forest Logistic Regression 0.6557 0.6506  1.144   0.2525             False
+Random Forest             XGBoost 0.6557 0.6517  0.902   0.3669             False
+Random Forest            LightGBM 0.6557 0.6449  2.165   0.0304              True
+Random Forest            CatBoost 0.6557 0.6557 -0.004   0.9969             False
+
+Literature benchmark:
+                     study                          approach   roc_auc                        notes
+      Strack et al. (2014) Logistic regression (HbA1c focus)     ~0.65       Original dataset paper
+      Typical published ML              GBM / RF / ensembles 0.64-0.69 Consistent across literature
+HealthGuard AI (this work)            CatBoost + calibration     0.655    Leakage-safe, with 95% CI
+
+Reports + figure saved.
+
+########################################################################
+# STEP 8/9: Clinical utility (decision curve + calibration)
+########################################################################
+Clinical utility evaluation...
+  Decision curve: model gives positive net benefit above both defaults for threshold probabilities ~0.01-0.45.
+
+Subgroup calibration (Brier score; lower is better):
+attribute           group     n  brier  observed_rate  mean_pred
+age_group           60-80  6632 0.0856         0.0983     0.0952
+age_group           30-60  4449 0.0651         0.0728     0.0733
+age_group             80+  2570 0.0882         0.1016     0.1080
+age_group            0-30   347 0.0502         0.0576     0.0587
+     race       Caucasian 10451 0.0797         0.0913     0.0919
+     race AfricanAmerican  2554 0.0807         0.0904     0.0861
+     race         Unknown   350 0.0560         0.0629     0.0758
+     race        Hispanic   308 0.0831         0.0974     0.0752
+     race           Other   229 0.0433         0.0480     0.0735
+
+Figures -> /Users/suyash/Desktop/HealthGuardAI/reports/figures
+
+########################################################################
+# STEP 9/9: Fairness mitigation (equal opportunity)
+########################################################################
+Fairness mitigation: equal-opportunity post-processing by age...
+
+  Per-group thresholds: {'30-60': 0.515, '80+': 0.625, '60-80': 0.595, '0-30': 0.545}
+
+  TPR by age group, before vs after:
+group    n  tpr_before  tpr_after  selection_rate_before  selection_rate_after
+ 0-30  347       0.300      0.300                  0.046                 0.072
+30-60 4449       0.207      0.306                  0.058                 0.129
+60-80 6632       0.314      0.307                  0.147                 0.142
+  80+ 2570       0.398      0.299                  0.212                 0.140
+
+  Trade-off summary:
+    tpr_disparity_before        : 0.1917
+    tpr_disparity_after         : 0.0079
+    disparity_reduction_pct     : 95.9
+    overall_recall_before       : 0.3039
+    overall_recall_after        : 0.3047
+    overall_precision_before    : 0.2133
+    overall_precision_after     : 0.2014
+    alert_rate_before           : 0.1279
+    alert_rate_after            : 0.1359
+
+  TPR disparity reduced 0.192 -> 0.008 (96% reduction).
+  Figure -> /Users/suyash/Desktop/HealthGuardAI/reports/figures/fairness_mitigation_tpr.png
+
+Pipeline complete in 90s.
+Launch the dashboard:  streamlit run dashboard/app.py
