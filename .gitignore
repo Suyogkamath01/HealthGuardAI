@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments
+venv/
+.venv/
+env/
+
+# OS
+.DS_Store
+
+# Large raw data (keep a pointer/instructions in README instead if needed)
+# data/raw/diabetic_data.csv
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Private study notes (never publish)
+DEFENSE_GUIDE.md
+
+# Keep processed data, models and reports tracked so the dashboard runs
+# without retraining. Comment the lines below out if models are too large.
+# models/*.pkl
