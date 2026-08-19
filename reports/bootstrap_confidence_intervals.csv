@@ -1,0 +1,21 @@
+model,metric,mean,ci_low,ci_high
+Logistic Regression,roc_auc,0.6501,0.634,0.6656
+Logistic Regression,pr_auc,0.1701,0.1562,0.1852
+Logistic Regression,recall@0.5,0.53,0.502,0.5593
+Logistic Regression,f1@0.5,0.2206,0.2096,0.2319
+Random Forest,roc_auc,0.6552,0.6392,0.6704
+Random Forest,pr_auc,0.1779,0.1625,0.1948
+Random Forest,recall@0.5,0.4176,0.3898,0.4447
+Random Forest,f1@0.5,0.2362,0.2215,0.2509
+XGBoost,roc_auc,0.6512,0.6351,0.6665
+XGBoost,pr_auc,0.18,0.1644,0.198
+XGBoost,recall@0.5,0.4987,0.4718,0.5267
+XGBoost,f1@0.5,0.2266,0.2145,0.239
+LightGBM,roc_auc,0.6444,0.6281,0.6604
+LightGBM,pr_auc,0.178,0.1615,0.1961
+LightGBM,recall@0.5,0.4334,0.4033,0.4614
+LightGBM,f1@0.5,0.2246,0.2098,0.2386
+CatBoost,roc_auc,0.6551,0.6384,0.6707
+CatBoost,pr_auc,0.182,0.1658,0.2001
+CatBoost,recall@0.5,0.5003,0.4726,0.5298
+CatBoost,f1@0.5,0.2306,0.2181,0.2431
