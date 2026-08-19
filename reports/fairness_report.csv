@@ -1,0 +1,4 @@
+attribute,demographic_parity_diff,demographic_parity_ratio,equal_opportunity_diff,equalized_odds_fpr_diff,passes_4_5ths_rule
+race,0.0601,0.5566,0.2273,0.0664,False
+gender,0.0151,0.8881,0.0039,0.0167,True
+age_group,0.166,0.2174,0.1917,0.1604,False
