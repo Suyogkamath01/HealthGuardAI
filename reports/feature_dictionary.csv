@@ -1,0 +1,37 @@
+feature,dtype,n_unique,example
+race,str,6,Caucasian
+gender,str,2,Female
+admission_type_id,int64,8,2
+discharge_disposition_id,int64,21,1
+admission_source_id,int64,17,4
+time_in_hospital,int64,14,13
+medical_specialty,str,71,Unknown
+num_lab_procedures,int64,116,68
+num_procedures,int64,7,2
+num_medications,int64,75,28
+number_outpatient,int64,33,0
+number_emergency,int64,18,0
+number_inpatient,int64,13,0
+number_diagnoses,int64,16,8
+max_glu_serum,str,4,Not measured
+A1Cresult,str,4,Not measured
+metformin,str,4,No
+repaglinide,str,4,No
+glimepiride,str,4,No
+glipizide,str,4,Steady
+glyburide,str,4,No
+pioglitazone,str,4,No
+rosiglitazone,str,4,No
+insulin,str,4,Steady
+change,str,2,Ch
+diabetesMed,str,2,Yes
+readmitted_30d,int64,2,0
+diag_1_group,str,10,Circulatory
+diag_2_group,str,10,Circulatory
+diag_3_group,str,10,Other
+age_ordinal,int64,10,85
+age_group,str,4,80+
+total_prior_visits,int64,34,0
+service_utilization,int64,41,8
+n_meds_changed,int64,5,0
+n_active_meds,int64,7,2
