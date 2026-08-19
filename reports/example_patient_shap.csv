@@ -1,0 +1,9 @@
+feature,shap_value,direction
+discharge_disposition_id_15,0.8261490877135689,increases risk
+number_inpatient,0.5080184020524233,increases risk
+discharge_disposition_id_1,0.2597032286457541,increases risk
+age_ordinal,0.19212026414063507,increases risk
+service_utilization,0.09049101417132983,increases risk
+num_lab_procedures,0.08467314242558728,increases risk
+total_prior_visits,0.07541965400815558,increases risk
+number_emergency,0.061851834594767154,increases risk
