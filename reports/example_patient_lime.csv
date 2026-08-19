@@ -1,0 +1,9 @@
+feature,lime_weight
+discharge_disposition_id_23 <= 0.00,0.2711893385932487
+discharge_disposition_id_15 > 0.00,0.23326024057380823
+discharge_disposition_id_22 <= 0.00,-0.14031999958199934
+medical_specialty_Rheumatology <= 0.00,-0.1381176694481533
+discharge_disposition_id_25 <= 0.00,0.12465957432051872
+medical_specialty_Gynecology <= 0.00,0.1176358543663629
+admission_type_id_7 <= 0.00,0.07987383493989937
+medical_specialty_Ophthalmology <= 0.00,0.07105659780118748
