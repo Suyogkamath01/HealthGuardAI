@@ -1,0 +1,51 @@
+column,dtype,n_unique,missing_pct,dominant_share,strategy,note
+encounter_id,int64,101766,0.0,0.0,DROP_ID,Identifier / leakage risk — exclude from features.
+patient_nbr,int64,71518,0.0,0.0004,DROP_ID,Identifier / leakage risk — exclude from features.
+race,str,5,2.23,0.7478,IMPUTE_CATEGORY,Fill missing with an explicit 'Unknown' category.
+gender,str,3,0.0,0.5376,OK,Complete — usable as-is.
+age,str,10,0.0,0.2562,OK,Complete — usable as-is.
+weight,str,9,96.86,0.9686,DROP_HIGH_MISSING,96.9% missing — too sparse to impute.
+admission_type_id,int64,8,0.0,0.5305,OK,Complete — usable as-is.
+discharge_disposition_id,int64,26,0.0,0.5919,OK,Complete — usable as-is.
+admission_source_id,int64,17,0.0,0.565,OK,Complete — usable as-is.
+time_in_hospital,int64,14,0.0,0.1745,OK,Complete — usable as-is.
+payer_code,str,17,39.56,0.3956,IMPUTE_CATEGORY,Fill missing with an explicit 'Unknown' category.
+medical_specialty,str,72,49.08,0.4908,IMPUTE_CATEGORY,Fill missing with an explicit 'Unknown' category.
+num_lab_procedures,int64,118,0.0,0.0315,OK,Complete — usable as-is.
+num_procedures,int64,7,0.0,0.4584,OK,Complete — usable as-is.
+num_medications,int64,75,0.0,0.0598,OK,Complete — usable as-is.
+number_outpatient,int64,39,0.0,0.8355,OK,Complete — usable as-is.
+number_emergency,int64,33,0.0,0.8881,OK,Complete — usable as-is.
+number_inpatient,int64,21,0.0,0.6646,OK,Complete — usable as-is.
+diag_1,str,716,0.02,0.0674,IMPUTE_CATEGORY,Fill missing with an explicit 'Unknown' category.
+diag_2,str,748,0.35,0.0663,IMPUTE_CATEGORY,Fill missing with an explicit 'Unknown' category.
+diag_3,str,789,1.4,0.1135,IMPUTE_CATEGORY,Fill missing with an explicit 'Unknown' category.
+number_diagnoses,int64,16,0.0,0.4862,OK,Complete — usable as-is.
+max_glu_serum,str,3,94.75,0.9475,CATEGORY_NOT_MEASURED,NaN = test not performed; fill with 'Not measured'.
+A1Cresult,str,3,83.28,0.8328,CATEGORY_NOT_MEASURED,NaN = test not performed; fill with 'Not measured'.
+metformin,str,4,0.0,0.8036,OK,Complete — usable as-is.
+repaglinide,str,4,0.0,0.9849,OK,Complete — usable as-is.
+nateglinide,str,4,0.0,0.9931,DROP_ZERO_VARIANCE,One value covers 99.31% of rows — no signal.
+chlorpropamide,str,4,0.0,0.9992,DROP_ZERO_VARIANCE,One value covers 99.92% of rows — no signal.
+glimepiride,str,4,0.0,0.949,OK,Complete — usable as-is.
+acetohexamide,str,2,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+glipizide,str,4,0.0,0.8753,OK,Complete — usable as-is.
+glyburide,str,4,0.0,0.8953,OK,Complete — usable as-is.
+tolbutamide,str,2,0.0,0.9998,DROP_ZERO_VARIANCE,One value covers 99.98% of rows — no signal.
+pioglitazone,str,4,0.0,0.928,OK,Complete — usable as-is.
+rosiglitazone,str,4,0.0,0.9375,OK,Complete — usable as-is.
+acarbose,str,4,0.0,0.997,DROP_ZERO_VARIANCE,One value covers 99.70% of rows — no signal.
+miglitol,str,4,0.0,0.9996,DROP_ZERO_VARIANCE,One value covers 99.96% of rows — no signal.
+troglitazone,str,2,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+tolazamide,str,3,0.0,0.9996,DROP_ZERO_VARIANCE,One value covers 99.96% of rows — no signal.
+examide,str,1,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+citoglipton,str,1,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+insulin,str,4,0.0,0.4656,OK,Complete — usable as-is.
+glyburide-metformin,str,4,0.0,0.9931,DROP_ZERO_VARIANCE,One value covers 99.31% of rows — no signal.
+glipizide-metformin,str,2,0.0,0.9999,DROP_ZERO_VARIANCE,One value covers 99.99% of rows — no signal.
+glimepiride-pioglitazone,str,2,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+metformin-rosiglitazone,str,2,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+metformin-pioglitazone,str,2,0.0,1.0,DROP_ZERO_VARIANCE,One value covers 100.00% of rows — no signal.
+change,str,2,0.0,0.538,OK,Complete — usable as-is.
+diabetesMed,str,2,0.0,0.77,OK,Complete — usable as-is.
+readmitted,str,3,0.0,0.5391,OK,Complete — usable as-is.
