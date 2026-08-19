@@ -1,0 +1,6 @@
+Optuna hyperparameter search (30 trials/model)...
+  xgboost   best CV PR-AUC = 0.1772
+  lightgbm  best CV PR-AUC = 0.1750
+
+Best tuned model: xgboost  (CV PR-AUC=0.1772)
+Saved tuned model + study artefacts.
