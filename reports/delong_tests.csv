@@ -1,0 +1,5 @@
+model_a,model_b,auc_a,auc_b,z,p_value,significant_0.05
+Random Forest,Logistic Regression,0.6557,0.6506,1.144,0.2525,False
+Random Forest,XGBoost,0.6557,0.6517,0.902,0.3669,False
+Random Forest,LightGBM,0.6557,0.6449,2.165,0.0304,True
+Random Forest,CatBoost,0.6557,0.6557,-0.004,0.9969,False
