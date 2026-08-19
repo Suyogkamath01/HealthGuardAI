@@ -1,0 +1,28 @@
+Loading processed data...
+  train=55,992  test=13,998  pos_weight=10.14
+
+Training Logistic Regression ...
+  PR-AUC=0.169  ROC-AUC=0.651  recall@best=0.325  F1@best=0.239  CV PR-AUC=0.167±0.010
+
+Training Random Forest ...
+  PR-AUC=0.177  ROC-AUC=0.656  recall@best=0.384  F1@best=0.240  CV PR-AUC=0.168±0.008
+
+Training XGBoost ...
+  PR-AUC=0.179  ROC-AUC=0.652  recall@best=0.366  F1@best=0.238  CV PR-AUC=0.174±0.010
+
+Training LightGBM ...
+  PR-AUC=0.177  ROC-AUC=0.645  recall@best=0.326  F1@best=0.235  CV PR-AUC=0.170±0.008
+
+Training CatBoost ...
+  PR-AUC=0.181  ROC-AUC=0.656  recall@best=0.304  F1@best=0.251  CV PR-AUC=0.177±0.009
+
+=== Model comparison (sorted by PR-AUC) ===
+              model  roc_auc  pr_auc  brier  recall@0.5  precision@0.5  f1@0.5  best_threshold  recall@best  precision@best  f1@best  cv_pr_auc_mean  cv_pr_auc_std
+           CatBoost   0.6557  0.1812 0.2055      0.5012         0.1500  0.2309          0.5920       0.3039          0.2133   0.2507          0.1767         0.0094
+            XGBoost   0.6517  0.1790 0.2039      0.4996         0.1469  0.2270          0.5586       0.3660          0.1767   0.2383          0.1741         0.0102
+      Random Forest   0.6557  0.1772 0.1932      0.4185         0.1650  0.2367          0.5104       0.3842          0.1744   0.2399          0.1680         0.0076
+           LightGBM   0.6449  0.1771 0.1868      0.4336         0.1516  0.2247          0.5524       0.3262          0.1832   0.2346          0.1704         0.0082
+Logistic Regression   0.6506  0.1692 0.2278      0.5306         0.1395  0.2209          0.5984       0.3254          0.1887   0.2389          0.1673         0.0099
+
+Best model: CatBoost  ->  models/best_model.pkl
+Figures -> /Users/suyash/Desktop/HealthGuardAI/reports/figures
